@@ -33,18 +33,24 @@ currentUser = getpass.getuser()
 # Determine the host operating system and set OS specific variables
 hostOS = sys.platform
 
+# Windows
 if hostOS == 'win32':
 	eol = '\r\n'
 	sourcePath = 'C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\Resolve Disk Database\Resolve Projects'
 	destPath = os.path.join('C:\Users', currentUser, 'Documents\ResolveProjectBackup')
 
+# OS X
 elif hostOS == 'darwin':
 	eol = '\n'
 	sourcePath = '/Library/Application Support/Blackmagic Design/DaVinci Resolve/Resolve Disk Database/Resolve Projects'
 	destPath = os.path.join('/Users', currentUser, 'Documents/ResolveProjectBackup')
 
+# We assume Linux host unless Windows or OS X.
+# Tkinter is not included in CentOS 7.3. Use yum install tkinter.
 else:
-	errorwindow('%s OS is not supported' %hostOS)
+	eol = '\n'
+	sourcePath = '/opt/resolve/Resolve Disk Database/Resolve Projects'
+	destPath = os.path.join('/home', currentUser, 'Documents/ResolveProjectBackup')
 
 def wincompliance(ts):
 	"""remove space and colons from timestamp for Windows compliance"""
